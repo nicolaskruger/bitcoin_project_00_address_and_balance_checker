@@ -7,7 +7,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     )?;
 
     let info = rpc.get_blockchain_info()?;
-    println!("Altura atual: {}", info.blocks);
+    println!("Altura actual: {}", info.blocks);
 
     Ok(())
 }
