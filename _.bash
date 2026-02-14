@@ -1,2 +1,5 @@
 docker run -d   --name bitcoin-core -v bitcoin-data:/home/bitcoin/.bitcoin  -p 8332:8332   -p 18332:18332   -v bitcoin-data:/bitcoin   ruimarinho/bitcoin-core   -printtoconsole   -testnet=1   -server=1   -rpcuser=bitcoinrpc   -rpcpassword=supersegredo   -rpcallowip=0.0.0.0/0 -prune=2000
 docker exec -it bitcoin-core bitcoin-cli   -testnet   -rpcuser=bitcoinrpc   -rpcpassword=supersegredo   getblockchaininfo
+
+
+docker run -d   --name bitcoin-core -v bitcoin-data:/home/bitcoin/.bitcoin  -p 8332:8332   -p 18332:18332   -v bitcoin-data:/bitcoin   ruimarinho/bitcoin-core   -printtoconsole   -testnet=1   -server=1   -rpcuser=bitcoinrpc   -rpcpassword=supersegredo   -rpcallowip=0.0.0.0/0 -rucbind=0.0.0.0 -prune=2000
