@@ -1,4 +1,5 @@
 use actix_web::{App, HttpResponse, HttpServer, Responder, get, post, web};
+use bitcoin_project_00_address_and_balance_checker::infra::http::controller_http;
 // use bitcoincore_rpc::{Auth, Client, RpcApi};
 
 // fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -31,6 +32,7 @@ async fn manual_hello() -> impl Responder {
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new()
+            .configure(controller_http)
             .service(hello)
             .service(echo)
             .route("/hey", web::get().to(manual_hello))
