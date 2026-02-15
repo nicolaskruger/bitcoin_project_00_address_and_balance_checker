@@ -1,11 +1,21 @@
 use bitcoincore_rpc::{Auth, Client, RpcApi, json::GetBlockchainInfoResult};
 
-pub async fn fetch_last_blockchain() -> Result<GetBlockchainInfoResult, Box<dyn std::error::Error>>
-{
+use crate::value_objects::env_variables::EnvVariables;
+
+fn rcp_client() -> Result<Client, Box<dyn std::error::Error>> {
+    let env = EnvVariables::new();
+
     let rpc = Client::new(
-        "http://127.0.0.1:18332", // testnet
-        Auth::UserPass("bitcoinrpc".into(), "supersegredo".into()),
+        &env.blockchain_uri(),
+        Auth::UserPass(env.blockchain_user(), env.blockchain_password()),
     )?;
+
+    Ok(rpc)
+}
+
+pub async fn fetch_blockchain_info() -> Result<GetBlockchainInfoResult, Box<dyn std::error::Error>>
+{
+    let rpc = rcp_client()?;
 
     Ok(rpc.get_blockchain_info()?)
 }
@@ -17,7 +27,7 @@ mod tests {
     #[tokio::test]
     #[ignore]
     async fn fetch_last_blockchain_test() {
-        if let Ok(block) = fetch_last_blockchain().await {
+        if let Ok(block) = fetch_blockchain_info().await {
             println!("Altura actual: {}", block.blocks);
         }
     }
