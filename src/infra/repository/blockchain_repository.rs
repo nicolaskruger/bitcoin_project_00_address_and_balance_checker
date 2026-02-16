@@ -1,4 +1,8 @@
-use bitcoincore_rpc::{Auth, Client, RpcApi, bitcoin::Block, json::GetBlockchainInfoResult};
+use bitcoincore_rpc::{
+    Auth, Client, RpcApi,
+    bitcoin::{Block, BlockHash},
+    json::GetBlockchainInfoResult,
+};
 
 use crate::value_objects::env_variables::EnvVariables;
 
@@ -29,6 +33,15 @@ pub async fn fetch_blockchain_last() -> Result<Block, Box<dyn std::error::Error>
     let block = rpc.get_block(&block_hash)?;
 
     Ok(block)
+}
+
+pub async fn fetch_blockchain_hash_last() -> Result<BlockHash, Box<dyn std::error::Error>> {
+    let rpc = rcp_client()?;
+
+    let heitch = rpc.get_block_count()?;
+    let block_hash = rpc.get_block_hash(heitch)?;
+
+    Ok(block_hash)
 }
 
 #[cfg(test)]
