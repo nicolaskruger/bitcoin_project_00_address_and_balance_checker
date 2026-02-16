@@ -6,8 +6,8 @@ pub struct EnvVariables {
     blockchain_uri: String,
 }
 
-impl EnvVariables {
-    pub fn new() -> Self {
+impl Default for EnvVariables {
+    fn default() -> Self {
         Self {
             blockchain_user: env::var("BLOCKCHAIN_USER").unwrap_or("bitcoinrpc".to_string()),
             blockchain_password: env::var("BLOCKCHAIN_PASSWORD")
@@ -15,6 +15,12 @@ impl EnvVariables {
             blockchain_uri: env::var("BLOCKCHAIN_URI")
                 .unwrap_or("http://127.0.0.1:18332".to_string()),
         }
+    }
+}
+
+impl EnvVariables {
+    pub fn new() -> Self {
+        Self::default()
     }
 
     pub fn blockchain_user(&self) -> String {

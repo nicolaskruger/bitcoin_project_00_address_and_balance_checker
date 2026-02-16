@@ -44,6 +44,14 @@ pub async fn fetch_blockchain_hash_last() -> Result<BlockHash, Box<dyn std::erro
     Ok(block_hash)
 }
 
+pub async fn fetch_blockchain_by_hash(
+    block_hash: BlockHash,
+) -> Result<Block, Box<dyn std::error::Error>> {
+    let rpc = rcp_client()?;
+
+    Ok(rpc.get_block(&block_hash)?)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
