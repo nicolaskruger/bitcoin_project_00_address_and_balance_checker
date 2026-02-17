@@ -55,12 +55,29 @@ pub async fn fetch_blockchain_by_hash(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::str::FromStr;
 
     #[tokio::test]
     #[ignore]
     async fn fetch_last_blockchain_test() {
         if let Ok(block) = fetch_blockchain_info().await {
             println!("Altura actual: {}", block.blocks);
+        }
+    }
+
+    #[tokio::test]
+    #[ignore]
+    async fn fetch_blockchain_by_hash_test() {
+        // cargo test fetch_blockchain_by_hash_test -- --no-capture --ignored
+        if let Ok(hash) =
+            BlockHash::from_str("0000000000daa121e56a718458fab186c937e8eff99285ac91bbb65b782f4a59")
+        {
+            let result = fetch_blockchain_by_hash(hash).await;
+
+            match result {
+                Ok(ok) => println!("good"),
+                Err(err) => println!("{}", err),
+            }
         }
     }
 }
