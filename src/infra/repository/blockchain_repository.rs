@@ -1,31 +1,20 @@
 use bitcoincore_rpc::{
-    Auth, Client, RpcApi,
+    RpcApi,
     bitcoin::{Block, BlockHash},
     json::GetBlockchainInfoResult,
 };
 
-use crate::value_objects::env_variables::EnvVariables;
-
-fn rcp_client() -> Result<Client, Box<dyn std::error::Error>> {
-    let env = EnvVariables::new();
-
-    let rpc = Client::new(
-        &env.blockchain_uri(),
-        Auth::UserPass(env.blockchain_user(), env.blockchain_password()),
-    )?;
-
-    Ok(rpc)
-}
+use crate::infra::repository::rpc_repository::rpc_client;
 
 pub async fn fetch_blockchain_info() -> Result<GetBlockchainInfoResult, Box<dyn std::error::Error>>
 {
-    let rpc = rcp_client()?;
+    let rpc = rpc_client()?;
 
     Ok(rpc.get_blockchain_info()?)
 }
 
 pub async fn fetch_blockchain_last() -> Result<Block, Box<dyn std::error::Error>> {
-    let rpc = rcp_client()?;
+    let rpc = rpc_client()?;
 
     let heitch = rpc.get_block_count()?;
     let block_hash = rpc.get_block_hash(heitch)?;
@@ -36,7 +25,7 @@ pub async fn fetch_blockchain_last() -> Result<Block, Box<dyn std::error::Error>
 }
 
 pub async fn fetch_blockchain_hash_last() -> Result<BlockHash, Box<dyn std::error::Error>> {
-    let rpc = rcp_client()?;
+    let rpc = rpc_client()?;
 
     let heitch = rpc.get_block_count()?;
     let block_hash = rpc.get_block_hash(heitch)?;
@@ -47,7 +36,7 @@ pub async fn fetch_blockchain_hash_last() -> Result<BlockHash, Box<dyn std::erro
 pub async fn fetch_blockchain_by_hash(
     block_hash: BlockHash,
 ) -> Result<Block, Box<dyn std::error::Error>> {
-    let rpc = rcp_client()?;
+    let rpc = rpc_client()?;
 
     Ok(rpc.get_block(&block_hash)?)
 }
@@ -75,7 +64,7 @@ mod tests {
             let result = fetch_blockchain_by_hash(hash).await;
 
             match result {
-                Ok(ok) => println!("good"),
+                Ok(_) => println!("good"),
                 Err(err) => println!("{}", err),
             }
         }
